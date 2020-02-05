@@ -14,7 +14,7 @@ namespace DrinkAndGo.Data.Interfaces
 
         void RemoveFromCart(int drinkId);
 
-        IEnumerable<ShoppingCartItem> GetShoppingCartItems();
+        Task<IEnumerable<ShoppingCartItem>> GetShoppingCartItems();
 
         void ClearCart();
 

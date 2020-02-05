@@ -19,9 +19,9 @@ namespace DrinkAndGo.Data.Repositories
             DbSet = context.Set<TEntity>();
         }
 
-        public virtual TEntity Add(TEntity entity)
+        public async virtual Task<TEntity> Add(TEntity entity)
         {
-            Context.Add(entity);
+            await Context.AddAsync(entity);
             Save();
             return entity;
         }
@@ -51,9 +51,9 @@ namespace DrinkAndGo.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public IEnumerable<TEntity> GetAll()
+        public async Task<IEnumerable<TEntity>> GetAll()
         {
-            return DbSet.ToList();
+            return await DbSet.ToListAsync();
         }
 
         public void Remove(TEntity entity)
@@ -68,14 +68,14 @@ namespace DrinkAndGo.Data.Repositories
             Save();
         }
 
-        public void Save()
+        public async void Save()
         {
-            Context.SaveChanges();
+            await Context.SaveChangesAsync();
         }
 
-        public TEntity SingleOrDefault(Expression<Func<TEntity, bool>> predicate)
+        public Task<TEntity> SingleOrDefault(Expression<Func<TEntity, bool>> predicate)
         {
-            return DbSet.SingleOrDefault(predicate);
+            return DbSet.SingleOrDefaultAsync(predicate);
         }
 
         public void Update(TEntity entity)

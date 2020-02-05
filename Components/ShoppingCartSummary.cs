@@ -16,10 +16,10 @@ namespace DrinkAndGo.Components
     public class ShoppingCartSummary : ViewComponent
     {
         readonly IShoppingCartRepository _repository;
-        
+
         public ShoppingCartSummary(IShoppingCartRepository repository)
         {
-            _repository = repository;   
+            _repository = repository;
         }
 
         public IViewComponentResult Invoke()
@@ -27,7 +27,7 @@ namespace DrinkAndGo.Components
             ShoppingCart shoppingCart = new ShoppingCart
             {
                 ShoppingCartId = _repository.GetCart().ShoppingCartId,
-                ShoppingCartItems = _repository.GetShoppingCartItems().ToList()
+                ShoppingCartItems = _repository.GetShoppingCartItems().Result
             };
 
             var shoppingCartVM = new ShoppingCartViewModel

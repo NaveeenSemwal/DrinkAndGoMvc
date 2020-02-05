@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace DrinkAndGo.Data.Repositories
 {
@@ -17,15 +18,15 @@ namespace DrinkAndGo.Data.Repositories
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public void AddToCart(int drinkId, int quantity)
+        public async void AddToCart(int drinkId, int quantity)
         {
             string shoppingCartId = GetCart().ShoppingCartId;
-            var ShoppingcartItem = SingleOrDefault(x => x.DrinkId == drinkId && x.ShoppingCartId == shoppingCartId);
+            var ShoppingcartItem = await SingleOrDefault(x => x.DrinkId == drinkId && x.ShoppingCartId == shoppingCartId);
 
             if (ShoppingcartItem == null)
             {
                 ShoppingcartItem = new ShoppingCartItem { ShoppingCartId = shoppingCartId, DrinkId = drinkId, Quantity = quantity };
-                base.Add(ShoppingcartItem);
+               await base.Add(ShoppingcartItem);
             }
             else
             {
@@ -41,24 +42,24 @@ namespace DrinkAndGo.Data.Repositories
             RemoveRange(ShoppingcartItems);
         }
 
-        public  ShoppingCart GetCart()
+        public ShoppingCart GetCart()
         {
             string cartId = _httpContextAccessor.HttpContext.Session.GetString("CartId") ?? Guid.NewGuid().ToString();
             _httpContextAccessor.HttpContext.Session.SetString("CartId", cartId);
             return new ShoppingCart { ShoppingCartId = cartId };
         }
 
-        public IEnumerable<ShoppingCartItem> GetShoppingCartItems()
+        public async Task<IEnumerable<ShoppingCartItem>> GetShoppingCartItems()
         {
             string shoppingCartId = GetCart().ShoppingCartId;
-            var ShoppingcartItems = Find(x => x.ShoppingCartId == shoppingCartId).Include(s => s.Drink).ToList();
+            var ShoppingcartItems = await Find(x => x.ShoppingCartId == shoppingCartId).Include(s => s.Drink).ToListAsync();
             return ShoppingcartItems;
         }
 
-        public void RemoveFromCart(int drinkId)
+        public async void RemoveFromCart(int drinkId)
         {
             string shoppingCartId = GetCart().ShoppingCartId;
-            var ShoppingcartItem = SingleOrDefault(x => x.DrinkId == drinkId && x.ShoppingCartId == shoppingCartId);
+            var ShoppingcartItem = await SingleOrDefault(x => x.DrinkId == drinkId && x.ShoppingCartId == shoppingCartId);
 
             if (ShoppingcartItem != null)
             {
@@ -81,5 +82,7 @@ namespace DrinkAndGo.Data.Repositories
             return total;
 
         }
+
+        
     }
 }

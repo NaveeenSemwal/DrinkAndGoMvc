@@ -25,12 +25,12 @@ namespace DrinkAndGo.Controllers
         /// This  is used to show to show the shopping cart of user.
         /// </summary>
         /// <returns></returns>
-        public ViewResult Index()
+        public async Task<ViewResult> Index()
         {
             ShoppingCart shoppingCart = new ShoppingCart
             {
                 ShoppingCartId = _repository.GetCart().ShoppingCartId,
-                ShoppingCartItems = _repository.GetShoppingCartItems().ToList()
+                ShoppingCartItems = await _repository.GetShoppingCartItems()
             };
 
             var shoppingCartVM = new ShoppingCartViewModel

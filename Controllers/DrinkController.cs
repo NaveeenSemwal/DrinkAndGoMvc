@@ -4,9 +4,11 @@ using DrinkAndGo.Data.Models;
 using DrinkAndGo.Data.Repositories;
 using DrinkAndGo.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace DrinkAndGo.Controllers
 {
@@ -20,18 +22,18 @@ namespace DrinkAndGo.Controllers
         }
 
         [ActionName("List")]
-        public IActionResult Index(string category)
+        public async Task<IActionResult> Index(string category)
         {
             IEnumerable<Drink> drinks;
 
             if (!string.IsNullOrEmpty(category))
             {
-                drinks = _drinkRepository.Find(x => string.Compare(x.Category.Name, category, System.StringComparison.OrdinalIgnoreCase) == 0)
-                           .OrderByDescending(x => x.Id).ToList();
+                drinks = await _drinkRepository.Find(x => string.Compare(x.Category.Name, category, System.StringComparison.OrdinalIgnoreCase) == 0)
+                           .OrderByDescending(x => x.Id).ToListAsync();
             }
             else
             {
-                drinks = _drinkRepository.GetAll().OrderByDescending(x => x.Id);
+                drinks = await _drinkRepository.GetAll();
             }
 
             DrinkViewModel drinkViewModel = new DrinkViewModel() { Drinks = drinks };

@@ -9,6 +9,6 @@ namespace DrinkAndGo.Data.Models
     {
         public string ShoppingCartId { get; set; }
 
-        public List<ShoppingCartItem> ShoppingCartItems { get; set; }
+        public IEnumerable<ShoppingCartItem> ShoppingCartItems { get; set; }
     }
 }

@@ -10,15 +10,15 @@ namespace DrinkAndGo.Data.Interfaces
     {
         TEntity Get(TKeyType id);
 
-        IEnumerable<TEntity> GetAll();
+        Task<IEnumerable<TEntity>> GetAll();
 
         bool Any(Expression<Func<TEntity, bool>> predicate);
 
         IQueryable<TEntity> Find(Expression<Func<TEntity, bool>> predicate);
 
-        TEntity SingleOrDefault(Expression<Func<TEntity, bool>> predicate);
+        Task<TEntity> SingleOrDefault(Expression<Func<TEntity, bool>> predicate);
 
-        TEntity Add(TEntity entity);
+        Task<TEntity> Add(TEntity entity);
 
         IEnumerable<TEntity> AddRange(IEnumerable<TEntity> entities);
 
