@@ -1,0 +1,12 @@
+﻿@model DrinkViewModel
+
+@{
+    ViewBag.Title = " Drink List";
+}
+
+<div class="row marginTop">
+    @foreach (DrinkAndGo.Data.Models.Drink item in Model.Drinks)
+    {
+        @Html.Partial("_DrinkSummary", item)
+    }
+</div>
