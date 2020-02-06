@@ -24,6 +24,7 @@ namespace DrinkAndGo.Controllers
         [ActionName("List")]
         public async Task<IActionResult> Index(string category)
         {
+            //throw new System.Exception("Error in Drink");
             IEnumerable<Drink> drinks;
 
             if (!string.IsNullOrEmpty(category))

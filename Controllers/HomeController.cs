@@ -24,7 +24,5 @@ namespace DrinkAndGo.Controllers
 
             return View(drinkViewModel);
         }
-
-
     }
 }

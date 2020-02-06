@@ -49,6 +49,10 @@ namespace DrinkAndGo
             {
                 app.UseDeveloperExceptionPage(); // It will show the exception during development.
             }
+            else
+            {
+                app.UseExceptionHandler("/Error"); // Handling Exception globally.
+            }
 
             // app.UseDefaultFiles(); //  You can set or use default page which is in wwwroot.
 
