@@ -29,6 +29,10 @@ namespace DrinkAndGo
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DrinkDbContext>(option => option.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            // Need to add this service for AppInsight
+            services.AddApplicationInsightsTelemetry();
+
             services.AddMvc();
 
             services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<DrinkDbContext>();
