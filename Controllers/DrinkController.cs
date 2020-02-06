@@ -3,8 +3,10 @@ using DrinkAndGo.Data.Interfaces;
 using DrinkAndGo.Data.Models;
 using DrinkAndGo.Data.Repositories;
 using DrinkAndGo.ViewModels;
+using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,26 +17,42 @@ namespace DrinkAndGo.Controllers
     public class DrinkController : Controller
     {
         readonly IRepository<Drink, int> _drinkRepository;
+        private readonly TelemetryClient telemetryClient;
 
-        public DrinkController(IRepository<Drink, int> repository)
+        public DrinkController(IRepository<Drink, int> repository, TelemetryClient telemetryClient)
         {
             _drinkRepository = repository;
+            this.telemetryClient = telemetryClient;
         }
 
         [ActionName("List")]
         public async Task<IActionResult> Index(string category)
         {
-            //throw new System.Exception("Error in Drink");
-            IEnumerable<Drink> drinks;
+            this.telemetryClient.TrackEvent("DrinkListEvent");
 
-            if (!string.IsNullOrEmpty(category))
+            IEnumerable<Drink> drinks = null;
+
+            try
             {
-                drinks = await _drinkRepository.Find(x => string.Compare(x.Category.Name, category, System.StringComparison.OrdinalIgnoreCase) == 0)
-                           .OrderByDescending(x => x.Id).ToListAsync();
+                int b = 0;
+                int result = 5 / b;
+                if (!string.IsNullOrEmpty(category))
+                {
+                    drinks = await _drinkRepository.Find(x => string.Compare(x.Category.Name, category, System.StringComparison.OrdinalIgnoreCase) == 0)
+                               .OrderByDescending(x => x.Id).ToListAsync();
+                }
+                else
+                {
+                    drinks = await _drinkRepository.GetAll();
+                }
             }
-            else
+            catch (ApplicationException ex)
             {
-                drinks = await _drinkRepository.GetAll();
+                this.telemetryClient.TrackException(ex);
+            }
+            catch (Exception ex)
+            {
+                this.telemetryClient.TrackException(ex);
             }
 
             DrinkViewModel drinkViewModel = new DrinkViewModel() { Drinks = drinks };
