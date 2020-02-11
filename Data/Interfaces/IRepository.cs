@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -19,6 +20,8 @@ namespace DrinkAndGo.Data.Interfaces
         Task<TEntity> SingleOrDefault(Expression<Func<TEntity, bool>> predicate);
 
         Task<TEntity> Add(TEntity entity);
+
+        int Add(string command, SqlParameter[] param);
 
         IEnumerable<TEntity> AddRange(IEnumerable<TEntity> entities);
 

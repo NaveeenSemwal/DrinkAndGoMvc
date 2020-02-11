@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -21,9 +22,20 @@ namespace DrinkAndGo.Data.Repositories
 
         public async virtual Task<TEntity> Add(TEntity entity)
         {
-            await Context.AddAsync(entity);
+            await DbSet.AddAsync(entity);
             Save();
             return entity;
+        }
+
+        /// <summary>
+        /// This is how we can use Store proc in EF.
+        /// </summary>
+        /// <param name="command">usp_InsertDrink @p0, @p1 </param>
+        /// <param name="param"></param>
+        /// <returns></returns>
+        public int Add(string command, SqlParameter[] param)
+        {
+            return Context.Database.ExecuteSqlCommand(command, param);
         }
 
         public IEnumerable<TEntity> AddRange(IEnumerable<TEntity> entities)
