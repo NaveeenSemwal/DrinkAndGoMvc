@@ -1,1 +1,5 @@
 Microsoft.AspNetCore.Identity.EntityFrameworkCore 2.2.0.
+
+
+Install-Package Microsoft.Extensions.Configuration.AzureKeyVault
+https://medium.com/@dneimke/add-keyvault-to-an-asp-net-core-application-cab1012d2b60
