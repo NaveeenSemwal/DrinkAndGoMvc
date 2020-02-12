@@ -30,8 +30,13 @@ namespace DrinkAndGo
         {
             services.AddDbContext<DrinkDbContext>(option => option.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            // This is for configuring Azure Redis cache.  Connection string for this is Stored in Manage User secrets file.
+            services.AddDistributedRedisCache(x => x.Configuration = Configuration.GetConnectionString("RedisCache"));
+
             // Need to add this service for AppInsight
             services.AddApplicationInsightsTelemetry();
+
+            services.AddSession();
 
             services.AddMvc();
 
@@ -42,8 +47,6 @@ namespace DrinkAndGo
             services.AddTransient(typeof(IShoppingCartRepository), typeof(ShoppingCartRepository));
 
             services.AddTransient(typeof(IRepository<,>), typeof(EntityRepository<,>));
-
-            services.AddSession();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
